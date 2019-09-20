@@ -1,0 +1,225 @@
+/interface wireless
+set [ find default-name=wlan1 ] ssid=MikroTik
+/interface wireless security-profiles
+set [ find default=yes ] supplicant-identity=MikroTik
+/ip hotspot profile
+set [ find default=yes ] html-directory=flash/hotspot
+/ip ipsec proposal
+set [ find default=yes ] enc-algorithms=aes-128-cbc
+/ip pool
+add name=PLAN-EGP-230 ranges=10.30.0.0/24
+add name=PLAN-EGP-170 ranges=10.70.0.0/24
+add name=PLAN-EGP-460 ranges=10.60.0.0/24
+add name=PLAN-EGP-345 ranges=10.45.0.0/24
+add name=PLAN-EGP-128 ranges=10.28.0.0/24
+add name="PPP Quota" ranges=10.11.111.0/24
+add name=1GB-IP ranges=10.12.1.0/24
+add name=5GB-IP ranges=10.12.5.0/24
+add name=10GB-IP ranges=10.12.10.0/24
+add name=15GB-IP ranges=10.12.15.0/24
+add name=25GB-IP ranges=10.12.25.0/24
+/ppp profile
+set *0 local-address=10.10.10.1
+add change-tcp-mss=yes name=PLAN-EGP-460 remote-address=PLAN-EGP-460
+add change-tcp-mss=yes name=PLAN-EGP-230 remote-address=PLAN-EGP-230
+add change-tcp-mss=yes name=PLAN-EGP-170 remote-address=PLAN-EGP-170
+add change-tcp-mss=yes name=PLAN-EGP-345 remote-address=PLAN-EGP-345
+add change-tcp-mss=yes name=PLAN-EGP-128 remote-address=PLAN-EGP-128
+add change-tcp-mss=yes local-address=1GB-IP name=1GB on-up="#\C7\CF\CE\E1 \DF\E3\ED\C9 \C7\E1\E3\ED\DF\C7\CA \E4\E5\C7\ED\C9 \C7\E1\D3\D8\D1 \C7\CF\E4\C7\E5\r\
+    \n:local MB 1024\r\
+    \n:local c [/ppp secret get value-name=comment [find name=\"\$user\"]]\r\
+    \n:local c2 [:pick \$c ([find \$c \"\\\$@\"]+3) [:len \$c]]\r\
+    \n:if (\$c=\"\"||\$c2=\"Finished\") do={\r\
+    \n/ppp secret set comment=\"\\\$@Total=\$MB MB@t Tx=0 MB@tx Rx=0 MB@rx\" [find name=\"\$user\"]\r\
+    \n}" only-one=yes remote-address=1GB-IP
+add change-tcp-mss=yes local-address=5GB-IP name=5GB on-up="#\C7\CF\CE\E1 \DF\E3\ED\C9 \C7\E1\E3\ED\DF\C7\CA \E4\E5\C7\ED\C9 \C7\E1\D3\D8\D1 \C7\CF\E4\C7\E5\r\
+    \n:local MB 5120\r\
+    \n:local c [/ppp secret get value-name=comment [find name=\"\$user\"]]\r\
+    \n:local c2 [:pick \$c ([find \$c \"\\\$@\"]+3) [:len \$c]]\r\
+    \n:if (\$c=\"\"||\$c2=\"Finished\") do={\r\
+    \n/ppp secret set comment=\"\\\$@Total=\$MB MB@t Tx=0 MB@tx Rx=0 MB@rx\" [find name=\"\$user\"]\r\
+    \n}" only-one=yes remote-address=5GB-IP
+add change-tcp-mss=yes local-address=10GB-IP name=10GB on-up="#\C7\CF\CE\E1 \DF\E3\ED\C9 \C7\E1\E3\ED\DF\C7\CA \E4\E5\C7\ED\C9 \C7\E1\D3\D8\D1 \C7\CF\E4\C7\E5\r\
+    \n:local MB 10240\r\
+    \n:local c [/ppp secret get value-name=comment [find name=\"\$user\"]]\r\
+    \n:local c2 [:pick \$c ([find \$c \"\\\$@\"]+3) [:len \$c]]\r\
+    \n:if (\$c=\"\"||\$c2=\"Finished\") do={\r\
+    \n/ppp secret set comment=\"\\\$@Total=\$MB MB@t Tx=0 MB@tx Rx=0 MB@rx\" [find name=\"\$user\"]\r\
+    \n}" only-one=yes remote-address=10GB-IP
+add change-tcp-mss=yes local-address=15GB-IP name=15GB on-up="#\C7\CF\CE\E1 \DF\E3\ED\C9 \C7\E1\E3\ED\DF\C7\CA \E4\E5\C7\ED\C9 \C7\E1\D3\D8\D1 \C7\CF\E4\C7\E5\r\
+    \n:local MB 15360\r\
+    \n:local c [/ppp secret get value-name=comment [find name=\"\$user\"]]\r\
+    \n:local c2 [:pick \$c ([find \$c \"\\\$@\"]+3) [:len \$c]]\r\
+    \n:if (\$c=\"\"||\$c2=\"Finished\") do={\r\
+    \n/ppp secret set comment=\"\\\$@Total=\$MB MB@t Tx=0 MB@tx Rx=0 MB@rx\" [find name=\"\$user\"]\r\
+    \n}" remote-address=15GB-IP
+add change-tcp-mss=yes local-address=1GB-IP name="PPP Quota" on-up="#\C7\CF\CE\E1 \DF\E3\ED\C9 \C7\E1\E3\ED\DF\C7\CA \E4\E5\C7\ED\C9 \C7\E1\D3\D8\D1 \C7\CF\E4\C7\E5\r\
+    \n:local MB 1024\r\
+    \n:local c [/ppp secret get value-name=comment [find name=\"\$user\"]]\r\
+    \n:local c2 [:pick \$c ([find \$c \"\\\$@\"]+3) [:len \$c]]\r\
+    \n:if (\$c=\"\"||\$c2=\"Finished\") do={\r\
+    \n/ppp secret set comment=\"\\\$@Total=\$MB MB@t Tx=0 MB@tx Rx=0 MB@rx\" [find name=\"\$user\"]\r\
+    \n}" only-one=yes remote-address=1GB-IP
+add change-tcp-mss=yes local-address=25GB-IP name=25GB on-up="#\C7\CF\CE\E1 \DF\E3\ED\C9 \C7\E1\E3\ED\DF\C7\CA \E4\E5\C7\ED\C9 \C7\E1\D3\D8\D1 \C7\CF\E4\C7\E5\r\
+    \n:local MB 26843545600\r\
+    \n:local c [/ppp secret get value-name=comment [find name=\"\$user\"]]\r\
+    \n:local c2 [:pick \$c ([find \$c \"\\\$@\"]+3) [:len \$c]]\r\
+    \n:if (\$c=\"\"||\$c2=\"Finished\") do={\r\
+    \n/ppp secret set comment=\"\\\$@Total=\$MB MB@t Tx=0 MB@tx Rx=0 MB@rx\" [find name=\"\$user\"]\r\
+    \n}" remote-address=25GB-IP
+/queue type
+add kind=pcq name=PLAN-EGP-170 pcq-burst-rate=1400k pcq-burst-threshold=1300k pcq-burst-time=30s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=1300k \
+    pcq-src-address6-mask=64
+add kind=pcq name=PLAN-EGP-230 pcq-burst-rate=2560k pcq-burst-threshold=1900k pcq-burst-time=23s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=2M \
+    pcq-src-address6-mask=64
+add kind=pcq name=PLAN-EGP-345 pcq-burst-rate=3539k pcq-burst-threshold=3027k pcq-burst-time=23s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=3027k \
+    pcq-src-address6-mask=64
+add kind=pcq name="SHARE BOX" pcq-classifier=src-address,dst-address pcq-dst-address6-mask=64 pcq-rate=20M pcq-src-address6-mask=64
+add kind=pcq name=upload pcq-classifier=src-address pcq-dst-address6-mask=64 pcq-rate=3M pcq-src-address6-mask=64
+add kind=pcq name=PLAN-EGP-128 pcq-burst-rate=600k pcq-burst-threshold=512k pcq-burst-time=30s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=512k \
+    pcq-src-address6-mask=64
+add kind=pcq name=SAS pcq-classifier=src-address,dst-address pcq-dst-address6-mask=64 pcq-rate=20M pcq-src-address6-mask=64
+add kind=pcq name=PLAN-EGP-460 pcq-burst-rate=4608k pcq-burst-threshold=4096k pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=4096k pcq-src-address6-mask=64
+add kind=pcq name=1GB pcq-burst-rate=12M pcq-burst-threshold=9M pcq-burst-time=30s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=10M pcq-src-address6-mask=64
+add kind=pcq name=5GB pcq-burst-rate=5M pcq-burst-threshold=4M pcq-burst-time=30s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=4M pcq-src-address6-mask=64
+add kind=pcq name=15GB pcq-burst-time=30s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=256k pcq-src-address6-mask=64
+add kind=pcq name=10GB pcq-burst-rate=12M pcq-burst-threshold=9M pcq-burst-time=30s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=10M pcq-src-address6-mask=64
+add kind=pcq name="PPP Quota" pcq-burst-time=30s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-src-address6-mask=64
+add kind=pcq name=25GB pcq-burst-time=30s pcq-classifier=dst-address pcq-dst-address6-mask=64 pcq-rate=2M pcq-src-address6-mask=64
+/queue simple
+add burst-threshold=10M/10M name=SAS packet-marks="SAS-mark packet" queue=upload/SAS target=10.0.0.0/8
+add name=PLAN-EGP-128 queue=upload/PLAN-EGP-128 target=10.28.0.0/24
+add name=1GB queue=upload/1GB target=10.12.1.0/24
+add name=5GB queue=upload/5GB target=10.12.5.0/24
+add name=10GB queue=upload/10GB target=10.12.10.0/24
+add name=15GB queue=upload/15GB target=10.12.15.0/24
+add name=PLAN-EGP-170 queue=upload/PLAN-EGP-170 target=10.70.0.0/24
+add name=PLAN-EGP-230 queue=upload/PLAN-EGP-230 target=10.30.0.0/24
+add name=PLAN-EGP-345 queue=upload/PLAN-EGP-230 target=10.45.0.0/24
+add name=PLAN-EGP-460 queue=upload/PLAN-EGP-345 target=10.60.0.0/24
+add name="PPP Quota" queue="default-small/PPP Quota" target=10.111.1.0/24
+add name=25GB queue=upload/25GB target=10.12.25.0/24
+/interface pppoe-server server
+add authentication=pap,chap disabled=no interface=ether3 max-mru=1480 max-mtu=1480 mrru=1600 service-name=service2
+add authentication=pap,chap disabled=no interface=ether4 max-mru=1480 max-mtu=1480 mrru=1600 service-name=service3
+add authentication=pap,chap disabled=no interface=ether5 max-mru=1480 max-mtu=1480 mrru=1600 service-name=service4
+/ip address
+add address=192.168.1.200/24 comment="IN Ether-1" interface=ether1 network=192.168.1.0
+add address=188.188.188.3/24 comment=SAS3-Ether-2 interface=ether2 network=188.188.188.0
+add address=172.30.10.2/24 interface=ether3 network=172.30.10.0
+add address=172.50.10.1/24 interface=ether5 network=172.50.10.0
+add address=192.168.10.2/24 interface=ether4 network=192.168.10.0
+/ip dns
+set allow-remote-requests=yes servers=8.8.8.8,8.8.4.4
+/ip firewall address-list
+add address=10.28.0.0/24 list=IP-USER
+add address=10.70.0.0/24 list=IP-USER
+add address=10.30.0.0/24 list=IP-USER
+add address=10.45.0.0/24 list=IP-USER
+add address=10.60.0.0/24 list=IP-USER
+add address=212.126.0.0/16 comment=GOOGLE-IP list=GGC
+add address=188.188.188.3 list=SAS
+add address=10.11.0.0/24 list=IP-USER
+add address=10.12.1.0/24 list=IP-USER
+add address=10.12.10.0/24 list=IP-USER
+add address=10.12.15.0/24 list=IP-USER
+add address=10.12.5.0/24 list=IP-USER
+add address=10.11.111.0/24 list=IP-USER1
+add address=10.12.25.0/24 list=IP-USER
+/ip firewall mangle
+add action=mark-connection chain=prerouting comment=GGC new-connection-mark=GGC src-address-list=GGC
+add action=mark-packet chain=postrouting connection-mark=GGC new-packet-mark=GGC passthrough=no
+add action=mark-packet chain=postrouting comment="shared Box - mark packet" connection-mark="sharebox-M C" new-packet-mark="MARK PACKGE SHARE BOX" passthrough=no
+add action=mark-connection chain=prerouting comment="shared Box - mark connection" dst-address-list="SHARE BOX" new-connection-mark="sharebox-M C"
+add action=mark-packet chain=postrouting comment="SAS-mark packet" connection-mark="SAS-mark connection" new-packet-mark="SAS-mark packet" passthrough=no
+add action=mark-connection chain=prerouting comment="SAS-mark connection" dst-address-list=SAS new-connection-mark="SAS-mark connection"
+/ip firewall nat
+add action=masquerade chain=srcnat out-interface=ether1 src-address=10.0.0.0/8 src-address-list=IP-USER
+/ip route
+add distance=1 gateway=188.188.188.1
+add distance=1 gateway=172.10.10.1
+add distance=1 gateway=192.168.1.1
+/ppp aaa
+set interim-update=1m use-radius=yes
+/ppp secret
+add comment=" \$@Total=1 MB@t Tx=0 MB@tx Rx=0 MB@rx" limit-bytes-in=1048576 limit-bytes-out=1048576 name=moh password=66 profile=1GB service=pppoe
+add comment=" \$@Total=4237 MB@t Tx=297 MB@tx Rx=10 MB@rx" limit-bytes-in=4442816512 limit-bytes-out=4442816512 name=moh1 password=66 profile=5GB service=pppoe
+add comment=" \$@Total=189 MB@t Tx=6 MB@tx Rx=0 MB@rx" limit-bytes-in=198180864 limit-bytes-out=198180864 name=1 password=1 profile=1GB service=pppoe
+add name=ali password=66 profile=1GB service=pppoe
+add comment=" \$@Total=26843545357 MB@t Tx=202 MB@tx Rx=41 MB@rx" limit-bytes-in=28147497416261632 limit-bytes-out=28147497416261632 name=01000 password=16333 profile=25GB \
+    service=pppoe
+/radius
+add address=188.188.188.3 secret=123456 service=ppp,login timeout=3s
+/radius incoming
+set accept=yes port=1700
+/system clock
+set time-zone-name=Europe/Istanbul
+/system identity
+set name=PPPOE-SERVER
+/system scheduler
+add interval=1m name="PPP Quota" on-event=":foreach i in=[/ppp secret find profile=\"1GB\"] do={\r\
+    \n/local n [/ppp secret get value-name=name \$i]\r\
+    \n:if ([:len [/ppp active find name=\$n]]!=0) do={\r\
+    \n:global pppclient \"\$n\"\r\
+    \n/system script run \"PPP Quota\"\r\
+    \n}}\r\
+    \n" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive start-date=jul/05/2016 start-time=00:00:00
+add interval=1m name=schedule1 on-event=":foreach i in=[/ppp secret find profile=\"5GB\"] do={\r\
+    \n/local n [/ppp secret get value-name=name \$i]\r\
+    \n:if ([:len [/ppp active find name=\$n]]!=0) do={\r\
+    \n:global pppclient \"\$n\"\r\
+    \n/system script run \"PPP Quota\"\r\
+    \n}}\r\
+    \n" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive start-date=jul/05/2016 start-time=00:00:00
+add interval=1m name=schedule2 on-event=":foreach i in=[/ppp secret find profile=\"10GB\"] do={\r\
+    \n/local n [/ppp secret get value-name=name \$i]\r\
+    \n:if ([:len [/ppp active find name=\$n]]!=0) do={\r\
+    \n:global pppclient \"\$n\"\r\
+    \n/system script run \"PPP Quota\"\r\
+    \n}}\r\
+    \n" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive start-date=jul/05/2016 start-time=00:00:00
+add interval=1m name=schedule3 on-event=":foreach i in=[/ppp secret find profile=\"15GB\"] do={\r\
+    \n/local n [/ppp secret get value-name=name \$i]\r\
+    \n:if ([:len [/ppp active find name=\$n]]!=0) do={\r\
+    \n:global pppclient \"\$n\"\r\
+    \n/system script run \"PPP Quota\"\r\
+    \n}}\r\
+    \n" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive start-date=jul/05/2016 start-time=00:00:00
+add interval=1m name=schedule4 on-event=":foreach i in=[/ppp secret find profile=\"25GB\"] do={\r\
+    \n/local n [/ppp secret get value-name=name \$i]\r\
+    \n:if ([:len [/ppp active find name=\$n]]!=0) do={\r\
+    \n:global pppclient \"\$n\"\r\
+    \n/system script run \"PPP Quota\"\r\
+    \n}}\r\
+    \n" policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive start-date=jul/05/2016 start-time=00:00:00
+/system script
+add name="PPP Quota" owner=admin policy=ftp,reboot,read,write,policy,test,password,sniff,sensitive source="#\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\
+    \$\$\$\$\$#\r\
+    \n#                   BY IT LIVE IRAQ                           #\r\
+    \n#                          Nov/13/2017                                #\r\
+    \n#                  PPP Quota Measuring                         #\r\
+    \n#\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$\$#\r\
+    \n{\r\
+    \n:global pppclient \r\
+    \n:local comm [/ppp secret get value-name=comment [find name=\$pppclient]]\r\
+    \n:local total [:pick \$comm ([find \$comm \"Total=\"]+6) ([find \$comm \"MB@t\"]-1)]\r\
+    \n:local a [:pick \$comm 0 ([find \$comm \"\\\$@\"]-1) ]\r\
+    \n:local txo [:pick \$comm ([find \$comm \"Tx=\"]+3) ([find \$comm \"MB@tx\"]-1)]\r\
+    \n:local rxo [:pick \$comm ([find \$comm \"Rx=\"]+3) ([find \$comm \"MB@rx\"]-1)]\r\
+    \n:local tx (([/interface get value-name=tx-byte [find name=\"<pppoe-\$pppclient>\"]]/1024)/1024)\r\
+    \n:local rx (([/interface get value-name=rx-byte [find name=\"<pppoe-\$pppclient>\"]]/1024)/1024)\r\
+    \n:if ((\$tx<\$txo)||(rx<\$rxo)) do={\r\
+    \n:set txo 0; set rxo 0\r\
+    \n}\r\
+    \n:set total (\$total-\$tx-\$rx+\$txo+\$rxo)\r\
+    \n/ppp secret set comment=\"\$a \\\$@Total=\$total MB@t Tx=\$tx MB@tx Rx=\$rx MB@rx\" [find name=\"\$pppclient\"]\r\
+    \n/ppp secret set limit-bytes-out=(\$total*1024*1024) limit-bytes-in=(\$total*1024*1024) [find name=\"\$pppclient\"]\r\
+    \n:if (\$total<=0) do={\r\
+    \n/ppp secret disable [find name=\"\$pppclient\"]\r\
+    \n/ppp active remove [find name=\"\$pppclient\"]\r\
+    \n/ppp secret set comment=\"\$a \\\$@ Finished\" [find name=\"\$pppclient\"]\r\
+    \n}\r\
+    \n}\r\
+    \n\r\
+    \n\r\
+    \n"
