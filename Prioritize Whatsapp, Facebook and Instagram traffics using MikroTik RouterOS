@@ -1,0 +1,24 @@
+
+/ip firewall filter
+add action=add-dst-to-address-list address-list=Facebook address-list-timeout=4d chain=forward comment=Facebook content=.facebook.com
+add action=add-dst-to-address-list address-list=Facebook address-list-timeout=4d chain=forward content=.fbcdn.net
+add action=add-dst-to-address-list address-list=Facebook address-list-timeout=4d chain=forward content=.facebook.net
+add action=add-dst-to-address-list address-list=Instagram address-list-timeout=4d chain=forward comment=Instagram content=.instagram.com
+add action=add-dst-to-address-list address-list=Instagram address-list-timeout=4d chain=forward content=.cdninstagram.com
+add action=add-dst-to-address-list address-list=Whatsapp address-list-timeout=4d chain=forward comment=Whatsapp content=whats.com
+add action=add-dst-to-address-list address-list=Whatsapp address-list-timeout=4d chain=forward content=whatsapp.net
+add action=add-dst-to-address-list address-list=Whatsapp address-list-timeout=4d chain=forward content=wa.me
+add action=add-dst-to-address-list address-list=Whatsapp address-list-timeout=4d chain=forward content=whatsapp
+add action=add-dst-to-address-list address-list=Whatsapp address-list-timeout=4d chain=forward content=.wa.me
+/ip firewall mangle
+add action=mark-connection chain=prerouting comment=Facebook dst-address-list=Facebook new-connection-mark=Facebook-Conn passthrough=yes
+add action=mark-packet chain=prerouting connection-mark=Facebook-Conn new-packet-mark=Facebook-Packet passthrough=no
+add action=mark-connection chain=prerouting comment=Instagram dst-address-list=Instagram new-connection-mark=Instagram-Conn passthrough=yes
+add action=mark-packet chain=prerouting connection-mark=Instagram-Conn new-packet-mark=Instagram-Packet passthrough=no
+add action=mark-connection chain=prerouting comment=Whatsapp dst-address-list=Whatsapp new-connection-mark=Whatsapp-Conn passthrough=yes
+add action=mark-packet chain=prerouting connection-mark=Whatsapp-Conn new-packet-mark=Whatsapp-Packet passthrough=no
+
+/queue simple
+add name=queue3 packet-marks=Whatsapp-Packet priority=1/1 target=""
+add name=queue1 packet-marks=Facebook-Packet priority=2/2 target=""
+add name=queue2 packet-marks=Instagram-Packet priority=3/3 target=""
