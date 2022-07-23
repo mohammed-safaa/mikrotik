@@ -1,0 +1,27 @@
+
+/ip firewall mangle
+add action=mark-connection chain=prerouting comment=\
+    "PubG Ping Priority (Mark Connection)" new-connection-mark=PubG \
+    passthrough=yes protocol=icmp
+add action=mark-connection chain=prerouting comment=\
+    "PubG UDP Ports (Mark Connection)" dst-port=3013,9030,17000 \
+    new-connection-mark=PubG passthrough=yes protocol=udp
+add action=mark-connection chain=prerouting comment=\
+    "PubG UDP Ports Range 1 (Mark Connection)" dst-port=8000-8999 \
+    new-connection-mark=PubG passthrough=yes protocol=udp
+add action=mark-connection chain=prerouting comment=\
+    "PubG UDP Ports Range 2 (Mark Connection)" dst-port=10000-10999 \
+    new-connection-mark=PubG passthrough=yes protocol=udp
+add action=mark-connection chain=prerouting comment=\
+    "PubG UDP Ports Range 3 (Mark Connection)" dst-port=20000-20999 \
+    new-connection-mark=PubG passthrough=yes protocol=udp
+add action=mark-connection chain=prerouting comment=\
+    "PubG TCP Ports (Mark Connection)" dst-port=17500 new-connection-mark=\
+    PubG passthrough=yes protocol=tcp
+add action=mark-packet chain=prerouting comment="PubG (Mark Packet)" \
+    connection-mark=PubG new-packet-mark=PubG passthrough=yes
+  
+#Add Simple Queue 
+/queue simple 
+add comment="PubG Gaming And Ping Policy" max-limit=50M/50M name=PUBG \
+    packet-marks=PubG priority=1/1 target=""
