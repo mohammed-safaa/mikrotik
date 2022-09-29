@@ -1,0 +1,11 @@
+/ip firewall mangle
+add action=mark-connection chain=forward comment=hala-shashety-upload dst-port=9191 in-interface-list=all new-connection-mark=hala-shashety-upload out-interface-list=all \
+    protocol=tcp
+add action=mark-packet chain=forward comment=hala-shashety-markpacket-upload connection-mark=hala-shashety-upload in-interface-list=all new-packet-mark=\
+    hala-shashety-markpacket-upload out-interface-list=all passthrough=no
+add action=mark-connection chain=prerouting comment=MarkConn-shabakaty new-connection-mark=MarkConn-shabakaty src-address-list=shabakaty
+add action=mark-packet chain=postrouting comment=MarkRou-shabakaty connection-mark=MarkConn-shabakaty new-packet-mark=MarkRou-shabakaty passthrough=no
+add action=mark-connection chain=forward comment=MarkConn-shabakaty-upload dst-port=443 in-interface-list=all new-connection-mark=MarkConn-shabakaty-upload \
+    out-interface-list=all protocol=tcp
+add action=mark-packet chain=forward comment=MarkConn-shabakaty-markpacket-upload connection-mark=MarkConn-shabakaty-upload dst-port=443 in-interface-list=all \
+    new-packet-mark=MarkConn-shabakaty-markpacket-upload out-interface-list=all passthrough=yes protocol=tcp
